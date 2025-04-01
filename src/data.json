@@ -1,88 +1,106 @@
 [
   {
-    "sname": "books",
-    "nquantity": 30,
-    "sstatus": "unavailable",
-    "nprice": 90,
+    "sName": "books",
+    "nQuantity": 30,
+    "sStatus": "unavailable",
+    "nPrice": 90,
     "id": "fb83ab4b-83c9-4934-a41f-96c85bef710d",
-    "screatedAt": "28/3/2025",
-    "supdatedAt": "28/3/2025"
+    "sCreatedAt": "28/3/2025",
+    "sUpdatedAt": "28/3/2025"
   },
   {
-    "sname": "iPhone",
-    "nquantity": 30,
-    "sstatus": "unavailable",
-    "nprice": 90000,
+    "sName": "iPhone",
+    "nQuantity": 30,
+    "sStatus": "unavailable",
+    "nPrice": 90000,
     "id": "317e6ee6-d748-4163-b6be-8c4904566a0c",
-    "screatedAt": "28/3/2025",
-    "supdatedAt": "28/3/2025"
+    "sCreatedAt": "28/3/2025",
+    "sUpdatedAt": "28/3/2025"
   },
   {
-    "sname": "charger",
-    "nquantity": 3,
-    "sstatus": "available",
-    "nprice": 900,
+    "sName": "comb",
+    "nQuantity": 32,
+    "sStatus": "unavailable",
+    "nPrice": 3000,
     "id": "16b1b609-93e0-4a92-a872-cff359ba6772",
-    "screatedAt": "28/3/2025",
-    "supdatedAt": "28/3/2025"
+    "sCreatedAt": "28/3/2025",
+    "sUpdatedAt": "28/3/2025"
   },
   {
-    "sname": "bottle",
-    "nquantity": 3,
-    "sstatus": "available",
-    "nprice": 900,
-    "id": "5e0ceec8-a350-4778-92ac-e741875b9563",
-    "screatedAt": "28/3/2025",
-    "supdatedAt": "28/3/2025"
-  },
-  {
-    "sname": "shoes",
-    "nquantity": 10,
-    "sstatus": "available",
-    "nprice": 9000,
+    "sName": "shoes",
+    "nQuantity": 10,
+    "sStatus": "available",
+    "nPrice": 9000,
     "id": "f81b1f63-5e2c-4359-bdf6-292eca163485",
-    "screatedAt": "28/3/2025",
-    "supdatedAt": "28/3/2025"
+    "sCreatedAt": "28/3/2025",
+    "sUpdatedAt": "28/3/2025"
   },
   {
     "id": "73f5d83a-ffcd-41f6-94ed-6df4e140ffcc",
-    "screatedAt": "28/3/2025",
-    "supdatedAt": "28/3/2025"
+    "sCreatedAt": "28/3/2025",
+    "sUpdatedAt": "28/3/2025"
   },
   {
-    "sname": "handkey",
-    "nquantity": 30,
-    "sstatus": "available",
-    "nprice": 200,
+    "sName": "handkey",
+    "nQuantity": 30,
+    "sStatus": "available",
+    "nPrice": 200,
     "id": "0391e83a-33c7-4ce2-9043-6eaa8f7af803",
-    "screatedAt": "28/3/2025",
-    "supdatedAt": "28/3/2025"
+    "sCreatedAt": "28/3/2025",
+    "sUpdatedAt": "28/3/2025"
   },
   {
-    "sname": "shirt",
-    "nquantity": 3,
-    "sstatus": "available",
-    "nprice": 300,
+    "sName": "shirt",
+    "nQuantity": 32,
+    "sStatus": "unavailable",
+    "nPrice": 3000,
     "id": "cfd6f1ac-0ac9-4a15-beba-7729b3fbf365",
-    "screatedAt": "28/3/2025",
-    "supdatedAt": "28/3/2025"
+    "sCreatedAt": "28/3/2025",
+    "sUpdatedAt": "28/3/2025"
   },
   {
-    "sname": "tie",
-    "nquantity": 3,
-    "sstatus": "unavailable",
-    "nprice": 300,
+    "sName": "tie",
+    "nQuantity": 3,
+    "sStatus": "unavailable",
+    "nPrice": 300,
     "id": "57837354-facd-45b3-912f-aa8a7841daf3",
-    "screatedAt": "28/3/2025",
-    "supdatedAt": "28/3/2025"
+    "sCreatedAt": "28/3/2025",
+    "sUpdatedAt": "28/3/2025"
   },
   {
-    "sname": "jacket",
-    "nquantity": 3,
-    "sstatus": "unavailable",
-    "nprice": 3000,
+    "sName": "jacket",
+    "nQuantity": 3,
+    "sStatus": "unavailable",
+    "nPrice": 3000,
     "id": "40cc42b8-28ca-4055-9e06-1d648c7ba8bb",
-    "screatedAt": "28/3/2025",
-    "supdatedAt": "28/3/2025"
+    "sCreatedAt": "28/3/2025",
+    "sUpdatedAt": "28/3/2025"
+  },
+  {
+    "sName": "pent",
+    "nQuantity": 32,
+    "sStatus": "available",
+    "nPrice": 3000,
+    "iId": "735b6015-aa9d-400a-af11-0f444ceb22a8",
+    "sCreatedAt": "1/4/2025",
+    "sUpdatedAt": "1/4/2025"
+  },
+  {
+    "sName": "macbook",
+    "nQuantity": 32,
+    "sStatus": "available",
+    "nPrice": 0,
+    "iId": "88950cdd-2cc6-48c2-b805-a908b52ebf4c",
+    "sCreatedAt": "1/4/2025",
+    "sUpdatedAt": "1/4/2025"
+  },
+  {
+    "sName": "muhjh",
+    "nQuantity": 32,
+    "sStatus": "available",
+    "nPrice": -2,
+    "iId": "87c814dd-fb8a-49b1-bd11-b446a332c2a6",
+    "sCreatedAt": "1/4/2025",
+    "sUpdatedAt": "1/4/2025"
   }
 ]

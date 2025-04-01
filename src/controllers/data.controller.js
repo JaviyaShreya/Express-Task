@@ -2,188 +2,152 @@ const {v4:uuidv4} = require('uuid')
 const{readFile,writeFile} =require('fs').promises
 const {event} = require('../utils/eventhandlers')
 const {validateData,validateId} = require('../middleware/validator')
-const {createResponse,date} = require('../helpers/helper')
+const {createResponse,date,status} = require('../helpers/helper')
 const path = require('path')
 
 async function pagiantion(req,res){
     try{
         const filePath =path.join(__dirname,'..','data.json')
-        const odata = await readFile(filePath,'utf-8')
-        const odataArr = JSON.parse(odata)
+        const oData = await readFile(filePath,'utf-8')
+        const oDataArr = JSON.parse(oData)
 
-        const nlimit = parseInt(req.query.nlimit) || 2
-        const npage = parseInt(req.query.npage) || 1
-        const nstart = (npage-1)*nlimit
-        const nend = npage*nlimit
-        const opageData = odataArr.slice(nstart,nend)
+        const nLimit = parseInt(req.query.nLimit) || 2
+        const nPage = parseInt(req.query.nPage) || 1
+        const nStart = (nPage-1)*nLimit
+        const nEnd = nPage*nLimit
+        const oPageData = oDataArr.slice(nStart,nEnd)
         
-        return createResponse({res, nstatuscode:200, oData:opageData})
+        return createResponse(res, "OK", {oData:oPageData})
     }
     catch(err){
         console.log(err)
-        if(err){
-            if(err.code==="ENOENT"){
-                return createResponse({res, nstatuscode:404, sMessage:"Data not found", bisError:true})
-            }
-            else{
-                return createResponse({res, nstatuscode:500, sMessage:err.message, bisError:true})
-            }
-        }
+        return createResponse(res, "InternalServerError", {sMessage:err.message, bisError:true})
     }
 }
 async function getAlldata(req,res){
+
     try{
         const filePath =path.join(__dirname,'..','data.json')
 
-        const odata = await readFile(filePath,'utf-8') 
-        const odataArr = JSON.parse(odata)
-        const onewdata = odataArr.filter(i=>i.sstatus==='available')
-        return createResponse({res, nstatuscode:200, sMessage:"Data Items Available", oData:onewdata})
+        const oData = await readFile(filePath,'utf-8') 
+        const oDataArr = JSON.parse(oData)
+        
+        const oNewdata = oDataArr.filter(i=>i.sStatus==="available" || i.sStatus==="Available")
+        return createResponse(res, "OK", {sMessage:"Data Items Available", oData:oNewdata})
         
     }
     catch(err){
         console.log(err)
-        if(err){
-            if(err.code==="ENOENT"){
-                return createResponse({res, nstatuscode:404, sMessage:"Data not found", bisError:true})
-            }
-            else{
-                return createResponse({res, nstatuscode:500, sMessage:err.message, bisError:true})
-            }
-        }
+        return createResponse(res, "InternalServerError", {sMessage:err.message, bisError:true})
     }
 }
 
 async function getdataById(req,res){
     try{
-        const iId = req.params.id
-        validateId(iId)
+        const {iId} = req.params
+        console.log(iId)
         const filePath =path.join(__dirname,'..','data.json')
-        const odata = await readFile(filePath,'utf-8')
-        const odataArr = JSON.parse(odata)
-        const nId = odataArr.findIndex(i=>i.id===iId)
+        const oData = await readFile(filePath,'utf-8')
+        const oDataArr = JSON.parse(oData)
+        const nId = oDataArr.findIndex(i=>i.id===iId)
+        
         if(nId==-1){
-            return createResponse({res, nstatuscode:404, sMessage:"Item not found", bisError:true})
+            return createResponse(res, "NotFound", {sMessage:"Item not found", bisError:true})
         }
-        //const oItem = odataArr.find(i=>i.id===iId)
-        return createResponse({res, nstatuscode:200, sMessage:"Data Item",oData:odataArr[nId]})
+        return createResponse(res, "OK", {sMessage:"Data Item",oData:oDataArr[nId]})
         
     }
     catch(err){
         console.log(err)
-        if(err){
-            if(err.code==="ENOENT"){
-                return createResponse({res, nstatuscode:404, sMessage:"Data not found", bisError:true})
-            }
-            else{
-                return createResponse({res, nstatuscode:500, sMessage: err.message, bisError:true})
-            }
-        }
+        return createResponse(res, "InternalServerError", {sMessage: err.message, bisError:true})
     }
 }
 
 async function addData(req,res){
 
-    const obody = req.body
+    const oBody = req.body
     try{
-        validateData(res,obody)
         const filePath =path.join(__dirname,'..','data.json')
-        const odata = await readFile(filePath,'utf-8')
-        const odataArr = JSON.parse(odata)
+        const oData = await readFile(filePath,'utf-8')
+        const oDataArr = JSON.parse(oData)
         
-        const onewdata = obody
-        const getId=odataArr.findIndex(i=>i.sname===onewdata.sname)
+        const oNewdata = oBody
+        const getId=oDataArr.findIndex(i=>i.sName===oNewdata.sName)
         if(getId!==-1){
-            return createResponse({res, nstatuscode:400, sMessage:"Item already exists", bisError:true})
+            return createResponse(res, "NotFound", {sMessage:"Item already exists", bisError:true})
         }
-        onewdata.id = uuidv4()
-        onewdata.screatedAt=date()
-        onewdata.supdatedAt=date()
-        odataArr.push(onewdata)
-        await writeFile(filePath,JSON.stringify(odataArr))
-        event.emit('itemCreated',onewdata)
-        return createResponse({res, nstatuscode:201, sMessage:"Data added successfully", oData:onewdata})
+        oNewdata.iId = uuidv4()
+        oNewdata.sCreatedAt=date()
+        oNewdata.sUpdatedAt=date()
+        oDataArr.push(oNewdata)
+        await writeFile(filePath,JSON.stringify(oDataArr))
+        event.emit('itemCreated',oNewdata)
+        return createResponse(res, "Create" , {sMessage:"Data added successfully", oData:oNewdata})
     }
     catch(err){
-        console.log(err)
-        if(err.code==="ENOENT"){
-            return createResponse({res, nstatuscode:404, sMessage:"Data not found", bisError:true})
-        }
-        else{
-            return createResponse({res, nstatuscode:500, sMessage:err.message, bisError:true})
-        }
+        console.log(err);
+        return createResponse(res, "InternalServerError", {sMessage:err.message, bisError:true})
     }
 }
 
 async function updateData(req,res){
     try{
-        const iId = req.params.id
-        validateId(iId)
-        const obody = req.body
+        const {iId}= req.params
+        const oBody = req.body
         const filePath =path.join(__dirname,'..','data.json')
-        const odata = await readFile(filePath,'utf-8')
-        const odataArr = JSON.parse(odata)
+        const oData = await readFile(filePath,'utf-8')
+        const oDataArr = JSON.parse(oData)
         
-        const nindex = odataArr.findIndex((i)=>i.id==iId)
+        const nindex = oDataArr.findIndex((i)=>i.id==iId)
         if(nindex===-1){
-            return createResponse({res, nstatuscode:404, sMessage:"Item not found", bisError:true})
+            return createResponse(res, "NotFound", {sMessage:"Item not found", bisError:true})
         }
-        validateData(res, obody)
-        const onewdata = obody
-        const getId=odataArr.findIndex(i=>i.sname===onewdata.sname)
-        if(getId!==-1){
-            return createResponse({res, nstatuscode:400, sMessage:"Item already exists", bisError:true})
+        validateData(res, oBody)
+        const oNewdata = oBody
+        const getId=oDataArr.findIndex(i=>i.sName===oNewdata.sName)
+        //  if(getId!==-1){
+        //     return createResponse(res, "NotFound", {sMessage:"Item already exists", bisError:true})
+        // }
+        console.log(oDataArr[nindex].sName)
+        if(oNewdata.sName!== oDataArr[nindex].sName && getId){
+            return createResponse(res, "NotFound", {sMessage:"Item Name already exists", bisError:true})
         }
-        odataArr[nindex] = {...odataArr[nindex],...onewdata}
-        onewdata.screatedAt=odataArr[nindex].screatedAt
-        onewdata.supdatedAt=date()
-        await writeFile(filePath,JSON.stringify(odataArr))
-        event.emit('itemUpdated',odataArr[nindex])
-        return createResponse({res, nstatuscode:200, sMessage:"Data Updated Successfully", oData:odataArr[nindex]})
+       
+        oDataArr[nindex] = {...oDataArr[nindex],...oNewdata}
+        oNewdata.sCreatedAt=oDataArr[nindex].sCreatedAt
+        oNewdata.sUpdatedAt=date()
+        await writeFile(filePath,JSON.stringify(oDataArr))
+        event.emit('itemUpdated',oDataArr[nindex])
+        return createResponse(res, "OK", {sMessage:"Data Updated Successfully", oData:oDataArr[nindex]})
     }
     catch(err){
-        if(err){
-            console.log(err)
-            if(err.code==="ENOENT"){
-                return createResponse({res, nstatuscode:404, sMessage:"Data not found", bisError:true})
-            }
-            else{
-                return createResponse({res, nstatuscode:500, sMessage:err.message, bisError:true})
-            }
-        }
+        console.log(err)
+        return createResponse(res, "InternalServerError", {sMessage:err.message, bisError:true})
     }
 }
 
 async function deleteData(req,res){
     try{
-        const iId = req.params.id
-        validateId(iId)
+        const {iId }= req.params
         const filePath =path.join(__dirname,'..','data.json')
-        const odata = await readFile(filePath,'utf-8')
-        const odataArr = JSON.parse(odata)
+        const oData = await readFile(filePath,'utf-8')
+        const oDataArr = JSON.parse(oData)
 
-        const nindex = odataArr.findIndex(i=>i.id===iId)
+        const nIndex = oDataArr.findIndex(i=>i.id===iId)
 
-        if(nindex===-1){
-            return createResponse({res, nstatuscode:404, sMessage:"Item not found", bisError:true})
+        if(nIndex===-1){
+            return createResponse(res, "NotFound", {sMessage:"Item not found", bisError:true})
         }
 
-        const onewdata = odataArr.filter(i=>i.id!==iId)
-        await writeFile(filePath,JSON.stringify(onewdata))
-        event.emit('itemDeleted',odataArr[nindex])
-        return createResponse({res, nstatuscode:200, sMessage:"Data Deleted Successfully"})
+        const oNewdata = oDataArr.filter(i=>i.id!==iId)
+        await writeFile(filePath,JSON.stringify(oNewdata))
+        event.emit('itemDeleted',oDataArr[nIndex])
+        return createResponse(res, "OK", {sMessage:"Data Deleted Successfully"})
               
     }
     catch(err){
         console.log(err.message)
-        if(err){
-            if(err.code==="ENOENT"){
-                return createResponse({res, nstatuscode:404, sMessage:"Data not found", bisError:true})
-            }
-            else{
-                return createResponse({res, nstatuscode:500, sMessage:err.me, bisError:true})
-            }
-        }
+        return createResponse(res, "InternalServerError", {sMessage:err.me, bisError:true})
     }
 }
 

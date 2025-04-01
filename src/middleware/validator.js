@@ -1,26 +1,22 @@
-const { v4: uuidValidate } = require('uuid');
 const { createResponse } = require('../helpers/helper');
+const { validationResult , check} = require('express-validator');
 
 
-function validateData(res,onewdata){
-    if(!onewdata.sname || !onewdata.nquantity || !onewdata.nprice || !onewdata.sstatus){
-        return createResponse({res, nstatuscode:400, sMessage:"Enter valid oData"})
+function reqValidator(req,res,next){
+    const err = validationResult(req);
+    if(!err.isEmpty()){
+        return createResponse(res, "BadRequest", err)
     }
-    else if(typeof onewdata.sname !== 'string' || typeof onewdata.nquantity !== 'number' || typeof onewdata.nprice !== 'number' || typeof onewdata.sstatus !== 'string'){
-        return createResponse({res, nstatuscode:400, sMessage:"Enter valid oData"})
-    }
-    else if(onewdata.nquantity < 0 || onewdata.nprice < 0){
-        return createResponse({res, nstatuscode:400, sMessage:"Enter valid oData"})
-    }
-    else if(onewdata.sname === "" || onewdata.nquantity === "" || onewdata.nprice === "" || onewdata.sstatus === ""){
-        return createResponse({res, nstatuscode:400, sMessage:"Enter valid oData"})
-    }
-
-        
+    next()
 }
-function validateId(res, id){
-    if(!uuidValidate(id)){
-        return createResponse({res, nstatuscode:400, sMessage:"Invalid ID"})
+function filpathExists(filePath){
+    if(!filePath){
+        return createResponse(res, "BadRequest", {sMessage:"File path is not valid"})
     }
 }
-module.exports = {validateData, validateId}
+
+const StatusValidate = [
+    check("sstatus").isString().isIn(["available","Available","Unavailbale","unavailable"]).notEmpty().withMessage("Status can't be empty"),
+
+]
+module.exports = {reqValidator, filpathExists,StatusValidate}
