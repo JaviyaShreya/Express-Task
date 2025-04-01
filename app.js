@@ -1,4 +1,4 @@
-const {port}= require('./config/config');
+const {port}= require('./src/config/config');
 const { errorHandler } = require('./src/middleware/errorHandler');
 const routes = require('./src/routes/data.routes');
 
